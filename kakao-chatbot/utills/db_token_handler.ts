@@ -37,17 +37,17 @@ export default class TokenHandler{
         }
     }
 
-    // refresh 토큰 재발급
-    static async getRefreshToken(loginToken: string): Promise<TokenResponse | null>{
+    // access 토큰 재발급
+    static async getAccessToken(refreshToken: string): Promise<TokenResponse | null>{
         try {
             // refresh 토큰 가져오기
             const body: object = {
-                'body': loginToken
+                'body': refreshToken
             };
             const response: AxiosResponse<TokenResponse> = await axios.post(TokenHandler.apiLoginTokenUrl, body);
             const newTokenItem: TokenResponse = {
-                'access': loginToken,
-                'refresh': response.data.refresh
+                'access': response.data.access,
+                'refresh': refreshToken
             };
 
             // 로컬에 토큰 저장
@@ -55,7 +55,7 @@ export default class TokenHandler{
             return newTokenItem;
         }
         catch (error) {
-            console.error('[Token] getRefreshToken :', error);
+            console.error('[Token] getAccessToken :', error);
             return null;
         }
     }
@@ -74,12 +74,12 @@ export default class TokenHandler{
     // 토큰 가져오기
     public static async getToken(): Promise<string | void> {
         let token: TokenResponse | null = localStorge.getItem() as TokenResponse;
-        // 저장된 토큰 없거나 토큰 만료 시 login 토큰 발급
-        if (!token || !await TokenHandler.verifyToken(token['access'])) token = await TokenHandler.getLoginToken();
-        // refresh 토큰 만료 시 재발급
-        if (token && !await TokenHandler.verifyToken(token['refresh'])) token = await TokenHandler.getRefreshToken(token['refresh']);
+        // 저장된 토큰 없거나 토큰 만료 시 refresh 토큰 발급
+        if (!token || !await TokenHandler.verifyToken(token['refresh'])) token = await TokenHandler.getLoginToken();
+        // access 토큰 만료 시 재발급
+        if (token && !await TokenHandler.verifyToken(token['access'])) token = await TokenHandler.getAccessToken(token['refresh']);
         
-        return token?.refresh;
+        return token?.access;
     }
 }
 
@@ -90,4 +90,4 @@ async function testFunc(): Promise<void>{
     console.log(token);
 }
 
-testFunc();
+// testFunc();

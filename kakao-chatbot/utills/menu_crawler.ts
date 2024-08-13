@@ -5,7 +5,7 @@ import { Interface } from 'readline';
 import DateHandler from "./date_handler";
 import { RestaurantInfo } from '../interface/restaurant_info';
 
-class MenuCrawler {
+export default class MenuCrawler {
     private readonly url: string;
     private $: cheerio.CheerioAPI | null = null;
     
@@ -134,4 +134,4 @@ async function testFunc() {
     console.log(restaurantInfo)
 }
 
-testFunc();
+// testFunc();
