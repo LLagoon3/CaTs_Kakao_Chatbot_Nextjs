@@ -21,7 +21,7 @@ interface TokenResponse {
     access: string;
 }
 
-class TokenHandler{
+export default class TokenHandler{
     public static apiLoginTokenUrl: string = `${apiUrl}/api/token/login/`;
     public static apiRefreshTokenUrl: string = `${apiUrl}/api/token/refresh/`;
     public static apiVerifyTokenUrl: string = `${apiUrl}/api/token/verify/`;
