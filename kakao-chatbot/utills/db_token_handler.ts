@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import LocalStorge from './local_storge';
+import TokenResponse from '../interface/token';
 
 // import * as path from 'path';
 
@@ -15,11 +16,6 @@ const adminData: object = {
 	            'password': 'cats1234'
             }
 
-// 응답 데이터 타입 정의
-interface TokenResponse {
-    refresh: string;
-    access: string;
-}
 
 export default class TokenHandler{
     public static apiLoginTokenUrl: string = `${apiUrl}/api/token/login/`;

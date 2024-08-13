@@ -2,15 +2,8 @@ import axios, { AxiosResponse } from 'axios';
 import * as cheerio from 'cheerio';
 import { stringify } from 'querystring';
 import { Interface } from 'readline';
-import DateHandler from "./date_handler"
-
-interface RestaurantInfo {
-    [key: string]: { // 날짜
-        [key: string]: { // 식당 이름
-            [key: string]: string[] // 시간대 : 식사 메뉴
-        };
-    };
-}
+import DateHandler from "./date_handler";
+import RestaurantInfo from '../interface/restaurantInfo';
 
 class MenuCrawler {
     private readonly url: string;
@@ -21,7 +14,6 @@ class MenuCrawler {
     }
 
     private async initialize(): Promise<void> {
-        console.log('init');
         try {
             const response: AxiosResponse = await axios.get(this.url);
             this.$ = cheerio.load(response.data); // cheerio 인스턴스를 $에 할당
@@ -37,11 +29,10 @@ class MenuCrawler {
             return null;
         }
         let targetDiv = this.$(`div[data-table="${tableId}"]`).text();
-        console.log(targetDiv.split('\n').filter(item => item.trim() !== '').map(item => item.trim()));
         return targetDiv.split('\n').filter(item => item.trim() !== '').map(item => item.trim());
     }
 
-    
+    // '08.12(월요일)' -> '2024-08-12'로 포맷팅
     private parseDateFromString(dateString: string): string {
         // 현재 년도를 얻습니다.
         const currentYear = new Date().getFullYear();
@@ -129,17 +120,18 @@ class MenuCrawler {
         return restaurantInfo;
     }
 
-    async test() {
-        console.log('test');
-        await this.initialize(); // initialize 메소드를 호출하여 cheerio를 초기화
-        console.log(this.parseTableIdAndMenu());
-
+    public async parseRestaurantInfo(): Promise<RestaurantInfo> {
+        await this.initialize(); // cheerio를 초기화
+        const restaurantInfo = this.parseTableIdAndMenu()
+        const emptyRestaurantInfo: RestaurantInfo = {};
+        return restaurantInfo ? restaurantInfo : emptyRestaurantInfo;
     }
 }
 
 async function testFunc() {
     const mc = new MenuCrawler('https://www.cbnucoop.com/service/restaurant/');
-    await mc.test(); // 비동기 메소드 호출 시 await 추가
+    const restaurantInfo = await mc.parseRestaurantInfo(); // 비동기 메소드 호출 시 await 추가
+    console.log(restaurantInfo)
 }
 
 testFunc();
