@@ -1,0 +1,22 @@
+# 빌드 출력 디렉토리
+kakao-chatbot/dist/
+
+# 의존성 디렉토리
+kakao-chatbot/node_modules/
+
+# TypeScript 빌드 정보 파일
+kakao-chatbot/tsconfig.tsbuildinfo
+
+# 환경 파일 (보안상 민감할 수 있음)
+kakao-chatbot/.env
+
+# 운영체제 및 IDE 관련 임시 파일
+.DS_Store
+*.log
+*.tmp
+
+# Next.js 관련 캐시 파일
+kakao-chatbot/.next/
+
+# 기타
+kakao-chatbot/package-lock.json
