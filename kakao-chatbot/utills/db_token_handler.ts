@@ -72,7 +72,7 @@ export default class TokenHandler{
     }
 
     // 토큰 가져오기
-    static async getToken(): Promise<string | void> {
+    public static async getToken(): Promise<string | void> {
         let token: TokenResponse | null = localStorge.getItem() as TokenResponse;
         // 저장된 토큰 없거나 토큰 만료 시 login 토큰 발급
         if (!token || !await TokenHandler.verifyToken(token['access'])) token = await TokenHandler.getLoginToken();

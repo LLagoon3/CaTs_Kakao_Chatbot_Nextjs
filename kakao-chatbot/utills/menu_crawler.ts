@@ -3,7 +3,7 @@ import * as cheerio from 'cheerio';
 import { stringify } from 'querystring';
 import { Interface } from 'readline';
 import DateHandler from "./date_handler";
-import RestaurantInfo from '../interface/restaurantInfo';
+import { RestaurantInfo } from '../interface/restaurant_info';
 
 class MenuCrawler {
     private readonly url: string;
